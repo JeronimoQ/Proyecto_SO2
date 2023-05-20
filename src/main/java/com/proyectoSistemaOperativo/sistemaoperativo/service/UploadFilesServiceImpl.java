@@ -118,8 +118,9 @@ public class UploadFilesServiceImpl implements UploadFilesService {
         Path path = Paths.get(builder.append(File.separator) + nuevoNomArchivo);
         Files.write(path, bytes);
 
-        usuarioDocumento.setUsuario("angel");
-        usuarioDocumento.setNumerodocumento(doc.getNumerdoc());
+        //usuarioDocumento.setUsuario();
+        //usuarioDocumento.setNumerodocumento(doc.getNumerdoc());
+        usuarioDocumento.setDocumento(doc);
         usuarioDocumento.setRutadocumento(path.toString());
         usuarioDocumento.setNombredocumento(nombreArchivoOriginal);
 

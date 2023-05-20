@@ -7,6 +7,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.Entity;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -37,5 +40,6 @@ public class Documento {
     @DateTimeFormat(pattern = "yyy-MM-dd")
     private Date fechaelaboracion;
 
-
+    @OneToMany(mappedBy = "documento")
+    private List<UsuarioDocumento> documentarchivo;
 }
