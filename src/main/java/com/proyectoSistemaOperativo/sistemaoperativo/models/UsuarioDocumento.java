@@ -21,11 +21,11 @@ public class UsuarioDocumento {
     @Column(name = "nombredocumento")
     private String nombredocumento;
 
-    /*@Column(name = "usuario")
+    @Column(name = "usuario")
     private String usu;
 
     @Column(name = "numerodocumento")
-    private String numerodocumento;*/
+    private String numerodocumento;
 
     @Column(name = "rutadocumento")
     private String rutadocumento;

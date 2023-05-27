@@ -46,4 +46,7 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario")
     private List<UsuarioDocumento> documentarchivo;
+
+    @OneToMany(mappedBy = "usuario")
+    private List<RegistroActividad> actividad;
 }

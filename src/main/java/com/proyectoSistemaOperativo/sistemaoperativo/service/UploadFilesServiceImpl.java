@@ -1,7 +1,9 @@
 package com.proyectoSistemaOperativo.sistemaoperativo.service;
 
 import com.proyectoSistemaOperativo.sistemaoperativo.models.Documento;
+import com.proyectoSistemaOperativo.sistemaoperativo.models.RegistroActividad;
 import com.proyectoSistemaOperativo.sistemaoperativo.models.UsuarioDocumento;
+import com.proyectoSistemaOperativo.sistemaoperativo.repository.RegistroActividadRepository;
 import com.proyectoSistemaOperativo.sistemaoperativo.repository.UsuarioDocumentoRepository;
 import com.proyectoSistemaOperativo.sistemaoperativo.repository.documentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +27,9 @@ public class UploadFilesServiceImpl implements UploadFilesService {
 
     @Autowired
     private UsuarioDocumentoRepository usuarioDocumentoRepository;
+
+    @Autowired
+    private RegistroActividadRepository registroActividadRepository;
 
     @Override
     public void subirArchivo(MultipartFile file, Documento doc) throws Exception {
@@ -89,10 +95,16 @@ public class UploadFilesServiceImpl implements UploadFilesService {
     @Override
     public void save(MultipartFile file, Documento doc) throws Exception {
         UsuarioDocumento usuarioDocumento = new UsuarioDocumento();
+        RegistroActividad registroActividad = new RegistroActividad();
+
         String nombreArchivoNuevo = UUID.randomUUID().toString();
+
         byte[] bytes = file.getBytes();
+
         String nombreArchivoOriginal = file.getOriginalFilename();
+
         String archivoExtension = nombreArchivoOriginal.substring(nombreArchivoOriginal.lastIndexOf("."));
+
         String nuevoNomArchivo = nombreArchivoNuevo + archivoExtension;
 
         //creando ruta para el archivo
@@ -103,6 +115,7 @@ public class UploadFilesServiceImpl implements UploadFilesService {
         //builder.append(File.separator);
         //builder.append(nuevoNomArchivo);
 
+
         File folder = new File(builder.toString());
         if (!folder.exists()) {
             folder.mkdirs();
@@ -110,22 +123,29 @@ public class UploadFilesServiceImpl implements UploadFilesService {
         builder.append(File.separator);
         builder.append(doc.getNumerdoc() + " - " + doc.getPropietariodocumento());
 
+
         File folder2 = new File(builder.toString());
         if (!folder2.exists()) {
             folder2.mkdirs();
         }
 
+
         Path path = Paths.get(builder.append(File.separator) + nuevoNomArchivo);
         Files.write(path, bytes);
 
-        //usuarioDocumento.setUsuario();
+        //usuarioDocumento.setUsu("Jero");
         //usuarioDocumento.setNumerodocumento(doc.getNumerdoc());
-        usuarioDocumento.setDocumento(doc);
+        /*String numDoc = doc.getNumerdoc();
+        usuarioDocumento.setDocumento(doc);*/
         usuarioDocumento.setRutadocumento(path.toString());
         usuarioDocumento.setNombredocumento(nombreArchivoOriginal);
 
         usuarioDocumentoRepository.save(usuarioDocumento);
 
+        registroActividad.setFechaRegistro(new Date());
+        registroActividad.setAccion("creado");
+        //registroActividad.setDocumento(doc);
+        registroActividadRepository.save(registroActividad);
 
         documentoRepository.save(doc);
 

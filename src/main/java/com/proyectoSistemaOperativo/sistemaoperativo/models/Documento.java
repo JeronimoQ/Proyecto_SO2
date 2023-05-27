@@ -42,4 +42,11 @@ public class Documento {
 
     @OneToMany(mappedBy = "documento")
     private List<UsuarioDocumento> documentarchivo;
+
+    @OneToMany(mappedBy = "documento")
+    private List<RegistroActividad> actividad;
+//
+//    @OneToMany(mappedBy = "documento")
+//    private List<RegistroActividad> actividades;
+
 }
