@@ -2,6 +2,7 @@ package com.proyectoSistemaOperativo.sistemaoperativo.service;
 
 import com.proyectoSistemaOperativo.sistemaoperativo.models.Documento;
 import com.proyectoSistemaOperativo.sistemaoperativo.models.RegistroActividad;
+import com.proyectoSistemaOperativo.sistemaoperativo.models.Usuario;
 import com.proyectoSistemaOperativo.sistemaoperativo.models.UsuarioDocumento;
 import com.proyectoSistemaOperativo.sistemaoperativo.repository.RegistroActividadRepository;
 import com.proyectoSistemaOperativo.sistemaoperativo.repository.UsuarioDocumentoRepository;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -93,13 +95,18 @@ public class UploadFilesServiceImpl implements UploadFilesService {
     }
 
     @Override
-    public void save(MultipartFile file, Documento doc) throws Exception {
+    public void save(MultipartFile file, Documento doc) {
+        Documento documento = new Documento();
         UsuarioDocumento usuarioDocumento = new UsuarioDocumento();
         RegistroActividad registroActividad = new RegistroActividad();
-
         String nombreArchivoNuevo = UUID.randomUUID().toString();
 
-        byte[] bytes = file.getBytes();
+        byte[] bytes = new byte[0];
+        try {
+            bytes = file.getBytes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         String nombreArchivoOriginal = file.getOriginalFilename();
 
@@ -114,6 +121,16 @@ public class UploadFilesServiceImpl implements UploadFilesService {
         builder.append("upload");
         //builder.append(File.separator);
         //builder.append(nuevoNomArchivo);
+
+       /* byte[] fileByte = new byte[0];
+        try {
+            fileByte = file.getBytes();
+            Path path = Paths.get("/sistemaoperativo/archivo/" + nuevoNomArchivo);
+            Files.write(path, fileByte);
+            usuarioDocumento.setRutadocumento(path.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
 
 
         File folder = new File(builder.toString());
@@ -131,28 +148,45 @@ public class UploadFilesServiceImpl implements UploadFilesService {
 
 
         Path path = Paths.get(builder.append(File.separator) + nuevoNomArchivo);
-        Files.write(path, bytes);
+        try {
+            Files.write(path, bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        //usuarioDocumento.setUsu("Jero");
-        //usuarioDocumento.setNumerodocumento(doc.getNumerdoc());
-        /*String numDoc = doc.getNumerdoc();
-        usuarioDocumento.setDocumento(doc);*/
+        documento.setNumerdoc(doc.getNumerdoc());
+        documento.setFechaelaboracion(doc.getFechaelaboracion());
+        documento.setPropietariodocumento(doc.getPropietariodocumento());
+        documento.setFechaingresosistema(new Date());
+
+
+        documentoRepository.save(documento);
+
+        usuarioDocumento.setUsuario(new Usuario());
+        usuarioDocumento.getUsuario().setDpi(123456789);
+        usuarioDocumento.setDocumento(new Documento());
+        usuarioDocumento.getDocumento().setNumerdoc(doc.getNumerdoc());
         usuarioDocumento.setRutadocumento(path.toString());
-        usuarioDocumento.setNombredocumento(nombreArchivoOriginal);
+        //usuarioDocumento.getUsuario().setUsername("Angel");
+        usuarioDocumento.setNombredocumentooriginal(nombreArchivoOriginal);
+        usuarioDocumento.setNuevonombre(nuevoNomArchivo);
 
         usuarioDocumentoRepository.save(usuarioDocumento);
 
         registroActividad.setFechaRegistro(new Date());
-        registroActividad.setAccion("creado");
-        //registroActividad.setDocumento(doc);
-        registroActividadRepository.save(registroActividad);
+        registroActividad.setAccion("carga");
+        registroActividad.setDocumento(new Documento());
+        registroActividad.getDocumento().setNumerdoc(doc.getNumerdoc());
+        registroActividad.setUsuario(new Usuario());
+        registroActividad.getUsuario().setDpi(123456789);
+        registroActividad.setIp("1");
 
-        documentoRepository.save(doc);
+        registroActividadRepository.save(registroActividad);
 
     }
 
     @Override
-    public void save(List<MultipartFile> files, Documento doc) throws Exception {
+    public void save(List<MultipartFile> files, Documento doc) {
 
         for (MultipartFile file : files) {
             this.save(file, doc);

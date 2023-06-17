@@ -1,6 +1,5 @@
 package com.proyectoSistemaOperativo.sistemaoperativo.models;
 
-import com.sun.tracing.dtrace.ProviderAttributes;
 import lombok.*;
 
 
@@ -18,14 +17,17 @@ public class UsuarioDocumento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "nombredocumento")
-    private String nombredocumento;
+    @Column(name = "nombredocumentooriginal")
+    private String nombredocumentooriginal;
 
-    @Column(name = "usuario")
+    @Column(name = "nuevonombre")
+    private String nuevonombre;
+
+  /*  @Column(name = "usuario")
     private String usu;
 
     @Column(name = "numerodocumento")
-    private String numerodocumento;
+    private String numerodocumento;*/
 
     @Column(name = "rutadocumento")
     private String rutadocumento;

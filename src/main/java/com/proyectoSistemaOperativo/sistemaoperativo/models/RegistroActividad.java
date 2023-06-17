@@ -25,9 +25,6 @@ public class RegistroActividad {
     @Column(name = "ipUsuario")
     private String ip;
 
-    @Column(name = "numerdoc")
-    private String numerdoc;
-
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss a")

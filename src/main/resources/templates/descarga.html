@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
@@ -38,61 +38,60 @@
             <h2 class="lead text-center fst-italic">Descarga de documentos digitalizados</h2>
         </div>
         <div class="card-body">
-            <form>
+            <form method="post" th:action="@{/descarga}">
                 <div class="row mb-3">
                     <div class="col">
                         <label for="propietario" class="form-label">Propietario:</label>
-                        <input type="text" class="form-control" id="propietario">
+                        <input type="text" class="form-control" id="propietario" name="propietario">
                     </div>
                     <div class="col">
                         <label for="fechaInicio" class="form-label">Fecha de inicio:</label>
-                        <input type="date" class="form-control" id="fechaInicio">
+                        <input type="date" class="form-control" id="fechaInicio" name="fechainicio" required>
+
                     </div>
                     <div class="col">
                         <label for="fechaFin" class="form-label">Fecha de fin:</label>
-                        <input type="date" class="form-control" id="fechaFin">
+                        <input type="date" class="form-control" id="fechaFin" name="fechafin" required>
                     </div>
                     <div class="col d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+                        <button type="submit" class="btn btn-primary" value="buscar" name="accion"><i
+                                class="fas fa-search"></i> Consulta
+                        </button>
                     </div>
                 </div>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>No. Documento</th>
+                        <th>Fecha de elaboración</th>
+                        <th>Fecha de ingreso</th>
+                        <th>Propietario</th>
+                        <th>Descarga</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="result:${resultados}">
+                        <td th:text="${result.documento.numerdoc}"></td>
+                        <td th:text="${result.documento.fechaelaboracion}"></td>
+                        <td th:text="${result.documento.fechaingresosistema}"></td>
+                        <td th:text="${result.documento.propietariodocumento}"></td>
+                        <td><input type="checkbox" name="documentosSeleccionados" id="documentosSeleccionados"
+                                   class="form-check-input" th:value="${result.nuevonombre}"></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-descargar" value="descargar" name="accion"><i
+                            class="fas fa-download"></i> Descargar
+                    </button>
+                </div>
             </form>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>No. Documento</th>
-                    <th>Fecha de elaboración</th>
-                    <th>Fecha de ingreso</th>
-                    <th>Propietario</th>
-                    <th>Descarga</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>01/01/2022</td>
-                    <td>02/01/2022</td>
-                    <td>John Doe</td>
-                    <td><input type="checkbox" class="form-check-input"></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>02/01/2022</td>
-                    <td>03/01/2022</td>
-                    <td>Jane Smith</td>
-                    <td><input type="checkbox" class="form-check-input"></td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>03/01/2022</td>
-                    <td>04/01/2022</td>
-                    <td>Bob Johnson</td>
-                    <td><input type="checkbox" class="form-check-input"></td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="text-center">
-                <button type="button" class="btn btn-descargar"><i class="fas fa-download"></i> Descargar</button>
+            <div >
+                <a class="btn btn-primary"  href="/home">Home</a>
+
+
             </div>
         </div>
     </div>

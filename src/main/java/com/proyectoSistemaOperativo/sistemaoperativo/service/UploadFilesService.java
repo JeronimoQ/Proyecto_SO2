@@ -9,7 +9,7 @@ public interface UploadFilesService {
 
     public void subirArchivo (MultipartFile file, Documento doc) throws Exception;
 
-    public void save(MultipartFile file, Documento doc) throws  Exception;
+    public void save(MultipartFile file, Documento doc);
 
     public void save(List<MultipartFile> files, Documento doc) throws Exception;
 

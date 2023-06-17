@@ -1,4 +1,4 @@
-package com.proyectoSistemaOperativo.sistemaoperativo.controller;
+/*package com.proyectoSistemaOperativo.sistemaoperativo.controller;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,4 +22,4 @@ public class FileUploadExceptionAdvice {
                 .addFlashAttribute("clase2", "danger");
 
         return "redirect:/carga";    }
-}
+}*/
